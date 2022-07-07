@@ -1,0 +1,21 @@
+body {
+    background: #fafafa;
+    color: #333333;
+    line-height: 1.8em;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #444444;
+}
+
+.post {
+    min-height: 30vh;
+    max-width: 60vw;
+}

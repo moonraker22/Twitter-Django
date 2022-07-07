@@ -1,0 +1,184 @@
+  <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+            <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+            <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+ <script type="text/babel">
+        function App() {
+            
+            const post_id = {{ post.id }};
+            const user_id = {{ user.id }};
+            const [state, setState] = React.useState({
+            "post_id": {{ post.id }},
+            "user_id": {{ user.id }},
+            "likes": 0,
+            });
+            React.useEffect(() => {
+                fetch('/likes_api/' + post_id, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        post_id: state.post_id,
+                        user_id: state.user_id
+                    })
+                    })          
+                .then(res => res.json())
+                .then(data => {
+                    setState({ ...state, likes: data.likes });
+                });
+            }, []);
+            
+            const LikesButton = ({likes, post_id, user_id}) => (
+                <button onClick={() => {likesHandler(state.post_id, state.user_id)}} className="btn btn-primary" >
+                    {state.likes} likes
+                </button>
+                );
+            
+            const likesHandler = (post_id, user_id) => {
+                console.log(post_id, user_id);
+                fetch('/likes_api/' + post_id, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        likes: state.likes + 1,
+                        post_id: state.post_id,
+                        user_id: state.user_id 
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    setState({...state, 'likes': data.likes});
+                    console.log(data);
+                });
+            };      
+                return (
+                    <div>
+                        My react
+                        <LikesButton likes={state.likes} />
+                    </div>
+                );
+            }
+            ReactDOM.render(<App />, document.querySelector("#root"));
+        </script>
+
+
+        <div class="container vstack d-flex justify-content-center">
+    {% if page_obj %}
+   <nav aria-label="page links" class="mx-auto my-2">
+       <ul class="pagination">
+           {% if page_obj.has_previous %}
+           <li class="page-item">
+               <a href="?page=1" class="page-link btn btn-outline-secondary">&laquo; first</a>
+            </li>
+           <li class="page-item">
+               <a class="page-link btn-outline-secondary" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+           </li>
+           {% endif %}
+           <li class="page-item active" aria-current="page">
+               <a class="page-link btn btn-outline-secondary" href="#"><span class="sr-only">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</span></a>
+           </li>
+            {% if page_obj.has_next %}
+           <li class="page-item">
+               <a class="page-link btn btn-outline-secondary" href="?page={{ page_obj.next_page_number }}">Next</a>
+           </li>
+            <li>
+                <a class="page-link btn btn-outline-secondary" href="?page={{ page_obj.paginator.num_pages }}">last
+                    &raquo;</a>
+            </li>
+            {% endif %}
+             {% endif %}
+       </ul>
+   </nav>
+   </div>
+
+   User.objects.filter(likes__user_id=1)
+
+   User.objects.filter(posts__user=1)
+<QuerySet [<User: moonraker>, <User: moonraker>, <User: moonraker>, <User: moonraker>, <User: moonraker>, <User: moonraker>]>
+
+    Posts.objects.filter(user__username="moonraker")
+<QuerySet [<Posts: Another Post>, <Posts: A Test Post>, <Posts: HTML Post>, <Posts: A New Post>, <Posts: Test2>, <Posts: Test>]>
+
+    Likes.objects.filter(user_id__username="moonraker")
+<QuerySet [<Likes: moonraker liked Test>]>
+>>> 
+
+u = User.objects.get(username="moonraker")
+ u.likes_set.all()
+<QuerySet [<Likes: moonraker liked Test>]>
+
+     u=User.objects.filter(username="moonraker").first()
+>>> u.get_followers()
+<QuerySet []>
+>>> u.get_following()
+<QuerySet [<Followers: moonraker follows test>]>
+>>> 
+
+ const postForm = document.querySelector('#post-form');
+                    postForm.addEventListener('submit', (e) => {
+                        e.preventDefault();
+                        const formId = postForm.id;
+                        console.log(postForm);
+                        fetch(url, {
+                            method: 'POST',
+                            body: formData
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                
+                                    console.log(data);
+                                
+                            })
+                            .catch(error => console.error(error));
+                    });
+
+                    for post in Posts.objects.all():
+...     z.append(post)
+
+[<Posts: test user>, <Posts: form test>, <Posts: Another Post>, <Posts: A Test Post>, <Posts: HTML Post>, <Posts: A New Post>, <Posts: Test2>, <Posts: Test>]
+>>> z[0].user_id
+2
+
+>> l=u.get_followers()
+>>> l
+<QuerySet [<Followers: test follows moonraker>]>
+>>> l[0].user_id
+<User: test>
+>>> l[0].following_user_id
+<User: moonraker>
+>>> for t in test:
+...     filter(user_id=t.following_user_id)
+
+User.objects.filter(followers__user_id=2).first()
+Posts.objects.filter(user__pk=u.id).first()
+>>> Followers.objects.filter(user_id=u.id).all()
+<QuerySet [<Followers:  test, #2 follows moonraker, #1 >, <Followers:  test2, #4 follows moonraker, #1 >]>
+>>> list(Followers.objects.filter(user_id=u.id).all())
+[<Followers:  test, #2 follows moonraker, #1 >, <Followers:  test2, #4 follows moonraker, #1 >]
+>>> >>> l=Followers.objects.filter(user_id=u.id).all()
+>>> l
+<QuerySet [<Followers:  test, #2 follows moonraker, #1 >, <Followers:  test2, #4 follows moonraker, #1 >]>
+>>> for i in l:
+...     print(i.id)
+... 
+1
+2
+>>> >> v=[]
+>>> for i in l:
+...     v.append(i.id)
+... 
+>>> v
+[1, 2]
+>>> Posts.objects.filter(user_id__in=v)
+<QuerySet [<Posts: test6>, <Posts: test5>, <Posts: test4>, <Posts: test3>, <Posts: test2>, <Posts: test post>]>
+>>> 
+
+                                                                                        new post 
+                                                                                        all posts
+                                                                                        profile
+                                                                                        following  
+                                                                                        pagination
+                                                                                        edit post      
+                                                                                        like unlike
